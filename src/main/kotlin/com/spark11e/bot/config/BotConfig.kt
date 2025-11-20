@@ -1,6 +1,6 @@
 package com.spark11e.bot.config
 
-import com.spark11e.bot.TelegramBot // Убедитесь, что путь к вашему классу бота правильный
+import com.spark11e.bot.TelegramBot 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.telegram.telegrambots.meta.TelegramBotsApi
