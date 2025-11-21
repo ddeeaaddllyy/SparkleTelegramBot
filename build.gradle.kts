@@ -7,7 +7,7 @@ plugins {
 
 val telegramBotVersion = "6.3.0"
 group = "com.valvyn"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 description = "testing telegram bot named valvyn"
 
 java {
@@ -26,6 +26,10 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	implementation("com.squareup.okhttp3:okhttp:5.3.0")
+
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 
 	implementation("org.telegram:telegrambots:${telegramBotVersion}")
 	implementation("org.telegram:telegrambotsextensions:${telegramBotVersion}")
