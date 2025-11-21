@@ -1,6 +1,6 @@
 package com.spark11e.bot.config
 
-import com.spark11e.bot.service.TelegramBotService // Убедитесь, что путь к вашему классу бота правильный
+import com.spark11e.bot.TelegramBot 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -11,7 +11,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 private open class BotConfig {
 
     @Bean
-    open fun telegramBotApi(telegramBot: TelegramBotService): TelegramBotsApi {
+    open fun telegramBotApi(telegramBot: TelegramBot): TelegramBotsApi {
 
         val botApi = TelegramBotsApi(DefaultBotSession::class.java)
 
