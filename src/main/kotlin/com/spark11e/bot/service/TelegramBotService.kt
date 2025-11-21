@@ -71,7 +71,7 @@ class TelegramBotService(
             null -> "Неизвестная команда. Используйте /help."
         }
 
-        sendMessage(chatId, responseText)
+        sendMessage(chatId, responseText as String)
     }
 
     @BotCommand("/help")
@@ -83,7 +83,7 @@ class TelegramBotService(
     private val hoyoverseService = HoyoverseService()
 
     @BotCommand("/")
-    public open fun getHsrStatsResponse(uid: String): String{
+    public open fun getHsrStatsResponse(uid: String) {
         val f = hoyoverseService.getHSRUserData(uid)
     }
 
