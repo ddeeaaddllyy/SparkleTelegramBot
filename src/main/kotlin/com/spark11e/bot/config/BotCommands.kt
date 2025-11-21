@@ -13,5 +13,6 @@ enum class BotCommands(
 {
     START(command = "/start", description = "bot start"),
     HELP(command = "/help", description = "show all commands"),
-    INFO(command = "/info", description = "about bot")
+    INFO(command = "/info", description = "about bot"),
+    HSR_STATS(command = "/get_hsr_account", description = "in process")
 }
