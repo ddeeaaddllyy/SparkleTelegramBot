@@ -3,6 +3,9 @@ package com.spark11e.bot.service
 import com.spark11e.bot.config.BotCommand
 import com.spark11e.bot.config.BotCommands
 import com.spark11e.bot.config.BotProperty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -10,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
+private val botScope = CoroutineScope(Dispatchers.IO)
 /**
  * Основной класс Telegram-бота.
  *
@@ -17,11 +21,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
  * Он расширяет TelegramLongPollingBot для получения обновлений через Long Polling.
  */
 @Component
-class TelegramBotService(
-    private val botProperty: BotProperty
+open class TelegramBotService(
+    private val botProperty: BotProperty,
+    private val hoyoverseService: HoyoverseService
 ) : TelegramLongPollingBot() {
 
-    private val log = LoggerFactory.getLogger(TelegramBotService::class.java)
+    private final val log = LoggerFactory.getLogger(TelegramBotService::class.java)
 
     override fun getBotToken() = botProperty.token
 
@@ -34,8 +39,10 @@ class TelegramBotService(
             val messageText = message.text
 
             if (messageText.startsWith(prefix = "/")) {
-                handleCommand(chatId = chatId, commandText = messageText)
-
+                // 🌟 Запускаем обработку команды в Coroutine 🌟
+                botScope.launch {
+                    handleCommand(chatId = chatId, commandText = messageText)
+                }
             } else {
                 sendMessage(chatId, "Вы сказали: \"$messageText\". Я пока умею только обрабатывать команды.")
             }
@@ -51,12 +58,12 @@ class TelegramBotService(
         }
     }
 
-    private final fun handleCommand(chatId: String, commandText: String) {
+    private final suspend fun handleCommand(chatId: String, commandText: String) {
         val parts = commandText.split("\\s+".toRegex(), 2)
-        val command = parts[0].toLowerCase()
+        val command = parts[0].lowercase()
         val arguments = parts.getOrNull(1)
 
-        val botCommand = BotCommands.entries.find { command.startsWith(it.command.toLowerCase()) }
+        val botCommand = BotCommands.entries.find { command.startsWith(it.command.lowercase()) }
 
         val responseText = when (botCommand) {
             BotCommands.START -> "Привет! Я Sparkle=). Используйте /help для списка команд."
@@ -65,13 +72,15 @@ class TelegramBotService(
                 val targetUid = it.trim()
                 if (targetUid.length == 9 && targetUid.all { char -> char.isDigit() }){
                     getHsrStatsResponse(targetUid)
-                }
+                } else {
+                    "Пж введи корректный UID (9 Цифр)"
+                } ?: "Пожалуйста, укажите UID после команды /get_hsr_account."
             }
             BotCommands.INFO -> "Создан с помощью Kotlin, Spring Boot и telegrambots.\nБот: ${botProperty.name}.\nВерсия: ${botProperty.version}"
             null -> "Неизвестная команда. Используйте /help."
         }
 
-        sendMessage(chatId, responseText as String)
+        sendMessage(chatId, responseText.toString())
     }
 
     @BotCommand("/help")
@@ -80,11 +89,23 @@ class TelegramBotService(
                 BotCommands.entries.joinToString("\n") { "${it.command} <- ${it.description}" }
     }
 
-    private val hoyoverseService = HoyoverseService()
 
-    @BotCommand("/")
-    public open fun getHsrStatsResponse(uid: String) {
-        val f = hoyoverseService.getHSRUserData(uid)
+    @BotCommand("/hoyostats")
+    public open suspend fun getHsrStatsResponse(uid: String): String {
+        val result = hoyoverseService.fetchHsrStats(uid)
+
+        return result.fold(
+            onSuccess = { data ->
+                "📊 Статистика игрока ${data.detailInfo.nickname}:\n" +
+                        "UID: ${data.uid}\n" +
+                        "Уровень (Level): ${data.detailInfo.level}\n" +
+                        "Достижений: ${data.detailInfo.recordInfo.achievementCount}"
+            },
+            onFailure = { error ->
+                "❌ Не удалось получить статистику для UID $uid.\n" +
+                        "Причина: ${error.message ?: "Неизвестная ошибка API/сети"}"
+            }
+        )
     }
 
 }
