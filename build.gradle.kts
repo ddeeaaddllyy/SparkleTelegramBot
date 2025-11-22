@@ -1,14 +1,15 @@
 plugins {
-	kotlin("jvm") version "1.9.25"
-	kotlin("plugin.spring") version "1.9.25"
+	kotlin("jvm") version "1.9.22"
+	kotlin("plugin.spring") version "1.9.22"
 	id("org.springframework.boot") version "3.5.7"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("com.google.devtools.ksp") version "1.9.22-1.0.17"
 }
 
 val telegramBotVersion = "6.3.0"
-group = "com.valvyn"
-version = "0.0.2-SNAPSHOT"
-description = "testing telegram bot named valvyn"
+val moshiVersion = "1.15.1"
+group = "com.spark11e"
+version = "0.0.3-SNAPSHOT"
 
 java {
 	toolchain {
@@ -18,6 +19,7 @@ java {
 
 repositories {
 	mavenCentral()
+	google()
 }
 
 dependencies {
@@ -26,10 +28,14 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-	implementation("com.squareup.okhttp3:okhttp:5.3.0")
-
+	implementation("com.squareup.okhttp3:okhttp:4.12.0")
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
+
+	implementation("com.squareup.moshi:moshi:${moshiVersion}")
+	implementation("com.squareup.moshi:moshi-kotlin:${moshiVersion}")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:${moshiVersion}")
 
 	implementation("org.telegram:telegrambots:${telegramBotVersion}")
 	implementation("org.telegram:telegrambotsextensions:${telegramBotVersion}")
