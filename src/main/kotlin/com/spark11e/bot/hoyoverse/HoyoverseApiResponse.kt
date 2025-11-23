@@ -13,3 +13,10 @@ data class ApiResponse(
 data class RecordInfo(
     val achievementCount: Int
 )
+
+data class DetailInfo(
+    val level: Int,
+    val nickname: String,
+    val uid: Long,
+    val recordInfo: RecordInfo
+)
