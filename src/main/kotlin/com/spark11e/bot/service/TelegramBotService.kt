@@ -72,10 +72,10 @@ open class TelegramBotService(
                 val targetUid = it.trim()
                 if (targetUid.length == 9 && targetUid.all { char -> char.isDigit() }){
                     getHsrStatsResponse(targetUid)
-                } else {
+                } else run {
                     "Пж введи корректный UID (9 Цифр)"
-                } ?: "Пожалуйста, укажите UID после команды /get_hsr_account."
-            }
+                }
+            } ?: "Введите UID"
             BotCommands.INFO -> "Создан с помощью Kotlin, Spring Boot и telegrambots.\nБот: ${botProperty.name}.\nВерсия: ${botProperty.version}"
             null -> "Неизвестная команда. Используйте /help."
         }
