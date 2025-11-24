@@ -1,4 +1,4 @@
-package com.spark11e.bot.config
+package com.spark11e.bot.telegram
 
 /**
 * Enum class для обеспечения более понятной

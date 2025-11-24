@@ -1,8 +1,8 @@
 package com.spark11e.bot.service
 
-import com.spark11e.bot.config.BotCommand
-import com.spark11e.bot.config.BotCommands
-import com.spark11e.bot.config.BotProperty
+import com.spark11e.bot.telegram.BotCommand
+import com.spark11e.bot.telegram.BotCommands
+import com.spark11e.bot.telegram.BotProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
