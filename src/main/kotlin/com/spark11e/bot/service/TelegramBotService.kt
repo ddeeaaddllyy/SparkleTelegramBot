@@ -80,7 +80,7 @@ open class TelegramBotService(
             null -> "Неизвестная команда. Используйте /help."
         }
 
-        sendMessage(chatId, responseText.toString())
+        sendMessage(chatId, responseText)
     }
 
     @BotCommand("/help")
