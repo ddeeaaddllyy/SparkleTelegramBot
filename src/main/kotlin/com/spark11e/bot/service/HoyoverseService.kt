@@ -61,7 +61,7 @@ open class HoyoverseService(
 
                 if (!response.isSuccessful) {
                     val error = response.body?.string()
-                    return Result.failure(IOException("HTTP Error: ${response.code}/${error}"))
+                    return Result.failure(IOException("HTTP Error: ${response.code}"))
                 }
                 val jsonBody = response.body?.string()
                 val result = jsonBody?.let { responseAdapter.fromJson(it) }
