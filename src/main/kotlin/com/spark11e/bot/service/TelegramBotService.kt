@@ -39,7 +39,6 @@ open class TelegramBotService(
             val messageText = message.text
 
             if (messageText.startsWith(prefix = "/")) {
-                // 🌟 Запускаем обработку команды в Coroutine 🌟
                 botScope.launch {
                     handleCommand(chatId = chatId, commandText = messageText)
                 }
