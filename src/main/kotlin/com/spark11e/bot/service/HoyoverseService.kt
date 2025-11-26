@@ -60,14 +60,22 @@ open class HoyoverseService(
             client.newCall(request).await().use { response ->
 
                 if (!response.isSuccessful) {
-                    val error = response.body?.string()
-                    return Result.failure(IOException("HTTP Error: ${response.code}"))
+                    // позже сделать отдельную функцию которая будет обрабатывать каждый код ошибки
+                    val error = when (response.code) {
+                        404 -> "User does not exist"
+                        408 -> "Request Timeout"
+                        410 -> "Gone"
+                        429 -> "Too Many Requests"
+                        else -> "Server Error, try later"
+                    }
+                    return Result.failure(IOException("HTTP Error ${response.code}\n" +
+                            "Reason: $error"))
                 }
                 val jsonBody = response.body?.string()
                 val result = jsonBody?.let { responseAdapter.fromJson(it) }
 
                 if (result == null) {
-                    Result.failure(Exception("body is empty"))
+                    Result.failure(Exception("Сервер не смог предоставить никаких данных о пользователе"))
                 }
                 else {
                     Result.success(result)
