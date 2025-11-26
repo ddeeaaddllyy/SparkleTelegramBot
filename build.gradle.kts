@@ -9,7 +9,7 @@ plugins {
 val telegramBotVersion = "6.3.0"
 val moshiVersion = "1.15.1"
 group = "com.spark11e"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.4-SNAPSHOT"
 
 java {
 	toolchain {
@@ -36,6 +36,10 @@ dependencies {
 	implementation("com.squareup.moshi:moshi:${moshiVersion}")
 	implementation("com.squareup.moshi:moshi-kotlin:${moshiVersion}")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:${moshiVersion}")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.xerial:sqlite-jdbc:3.45.1.0")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 	implementation("org.telegram:telegrambots:${telegramBotVersion}")
 	implementation("org.telegram:telegrambotsextensions:${telegramBotVersion}")
