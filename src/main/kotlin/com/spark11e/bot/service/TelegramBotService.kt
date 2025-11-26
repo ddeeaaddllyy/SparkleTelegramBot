@@ -23,7 +23,8 @@ private val botScope = CoroutineScope(Dispatchers.IO)
 @Component
 open class TelegramBotService(
     private val botProperty: BotProperty,
-    private val hoyoverseService: HoyoverseService
+    private val hoyoverseService: HoyoverseService,
+    private val userService: UserService
 ) : TelegramLongPollingBot() {
 
     private final val log = LoggerFactory.getLogger(TelegramBotService::class.java)
@@ -35,15 +36,21 @@ open class TelegramBotService(
     override fun onUpdateReceived(update: Update) {
         if (update.hasMessage() and update.message.hasText()) {
             val message = update.message
+
             val chatId = message.chatId.toString()
             val messageText = message.text
+
+            val userId: Long = message.from.id
+            val userNickname: String = message.from.userName ?: "Анонимный пользователь $userId"
+
+            val currentUser = userService.createOrLoadUser(userId, userNickname )
 
             if (messageText.startsWith(prefix = "/")) {
                 botScope.launch {
                     handleCommand(chatId = chatId, commandText = messageText)
                 }
             } else {
-                sendMessage(chatId, "Вы сказали: \"$messageText\". Я пока умею только обрабатывать команды.")
+                sendMessage(chatId, "${currentUser.nickname}, Вы сказали: \"$messageText\". Я пока умею только обрабатывать команды.")
             }
         }
     }
