@@ -1,5 +1,6 @@
 package com.spark11e.bot.service
 
+import com.spark11e.bot.model.User
 import com.spark11e.bot.telegram.BotCommand
 import com.spark11e.bot.telegram.BotCommands
 import com.spark11e.bot.telegram.BotProperty
@@ -14,12 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 private val botScope = CoroutineScope(Dispatchers.IO)
-/**
- * Основной класс Telegram-бота.
- *
- * Аннотация @Component регистрирует его как Spring Bean.
- * Он расширяет TelegramLongPollingBot для получения обновлений через Long Polling.
- */
+
 @Component
 open class TelegramBotService(
     private val botProperty: BotProperty,
@@ -47,7 +43,7 @@ open class TelegramBotService(
 
             if (messageText.startsWith(prefix = "/")) {
                 botScope.launch {
-                    handleCommand(chatId = chatId, commandText = messageText)
+                    handleCommand(chatId = chatId, commandText = messageText, user = currentUser)
                 }
             } else {
                 sendMessage(chatId, "${currentUser.nickname}, Вы сказали: \"$messageText\". Я пока умею только обрабатывать команды.")
@@ -64,7 +60,7 @@ open class TelegramBotService(
         }
     }
 
-    private final suspend fun handleCommand(chatId: String, commandText: String) {
+    private final suspend fun handleCommand(chatId: String, commandText: String, user: User) {
         val parts = commandText.split("\\s+".toRegex(), 2)
         val command = parts[0].lowercase()
         val arguments = parts.getOrNull(1)
@@ -83,7 +79,7 @@ open class TelegramBotService(
                     "Пж введи корректный UID (9 Цифр)"
                 }
             } ?: "Введите UID после /hoyostats"
-            BotCommands.USER_ACCOUNT -> getUserAccount()
+            BotCommands.USER_ACCOUNT -> getUserAccount(user)
             null -> "Неизвестная команда. Используйте /help."
         }
 
@@ -117,8 +113,19 @@ open class TelegramBotService(
 
 
     @BotCommand("/account")
-    public open fun getUserAccount(): String {
-        return "in process"
+    public open fun getUserAccount(user: User): String {
+        val dateJoined = user.joinedAt.toLocalDate()
+
+        return """
+        Ваша статистика аккаунта:
+        
+        * Никнейм: ${user.nickname}
+        * ID в Telegram: ${user.id}
+        * Зарегистрирован: $dateJoined
+        
+        Это вся доступная информация о вашем бот-аккаунте.
+    """.trimIndent()
+
     }
 
 }
