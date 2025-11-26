@@ -9,7 +9,7 @@ plugins {
 val telegramBotVersion = "6.3.0"
 val moshiVersion = "1.15.1"
 group = "com.spark11e"
-version = "0.0.4-SNAPSHOT"
+version = "0.1.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -31,7 +31,6 @@ dependencies {
 	implementation("com.squareup.okhttp3:okhttp:4.12.0")
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-
 
 	implementation("com.squareup.moshi:moshi:${moshiVersion}")
 	implementation("com.squareup.moshi:moshi-kotlin:${moshiVersion}")
