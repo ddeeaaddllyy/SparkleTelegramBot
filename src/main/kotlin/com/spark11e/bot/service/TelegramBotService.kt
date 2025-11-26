@@ -67,6 +67,7 @@ open class TelegramBotService(
         val responseText = when (botCommand) {
             BotCommands.START -> "Привет! Я Sparkle=). Используйте /help для списка команд."
             BotCommands.HELP -> getHelpMessage()
+            BotCommands.INFO -> "Создан с помощью Kotlin, Spring Boot и telegrambots.\nБот: ${botProperty.name}.\nВерсия: ${botProperty.version}"
             BotCommands.HSR_STATS -> arguments?.let {
                 val targetUid = it.trim()
                 if (targetUid.length == 9 && targetUid.all { char -> char.isDigit() }){
@@ -74,8 +75,8 @@ open class TelegramBotService(
                 } else run {
                     "Пж введи корректный UID (9 Цифр)"
                 }
-            } ?: "Введите UID"
-            BotCommands.INFO -> "Создан с помощью Kotlin, Spring Boot и telegrambots.\nБот: ${botProperty.name}.\nВерсия: ${botProperty.version}"
+            } ?: "Введите UID после /hoyostats"
+            BotCommands.USER_ACCOUNT -> getUserAccount()
             null -> "Неизвестная команда. Используйте /help."
         }
 
@@ -105,6 +106,12 @@ open class TelegramBotService(
                         "Причина: ${error.message ?: "Неизвестная ошибка API/сети"}"
             }
         )
+    }
+
+
+    @BotCommand("/account")
+    public open fun getUserAccount(): String {
+        return "in process"
     }
 
 }
