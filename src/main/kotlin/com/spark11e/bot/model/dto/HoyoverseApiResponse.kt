@@ -1,4 +1,4 @@
-package com.spark11e.bot.hoyoverse
+package com.spark11e.bot.model.dto
 
 import com.squareup.moshi.JsonClass
 
