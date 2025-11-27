@@ -38,4 +38,17 @@ public open class UserService (
             null
         }
     }
+
+    @Transactional
+    fun updateProfilePhoto(userId: Long, photoName: String): User? {
+        val user = userRepository.findById(userId)
+        return if (user.isPresent) {
+            val updatedUser = user.get().apply {
+                this.profilePhotoName = photoName // Сохраняем имя файла
+            }
+            userRepository.save(updatedUser)
+        } else {
+            null
+        }
+    }
 }
