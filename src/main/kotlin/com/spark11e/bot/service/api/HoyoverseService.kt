@@ -1,7 +1,7 @@
-package com.spark11e.bot.service
+package com.spark11e.bot.service.api
 
-import com.spark11e.bot.hoyoverse.ApiResponse
-import com.spark11e.bot.hoyoverse.HoyoverseProperty
+import com.spark11e.bot.model.dto.ApiResponse
+import com.spark11e.bot.config.HoyoverseProperty
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
