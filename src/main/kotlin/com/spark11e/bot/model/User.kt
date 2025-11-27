@@ -17,5 +17,8 @@ data class User (
     var nickname: String = "unknown",
 
     @Column(name = "joined_at", nullable = false)
-    val joinedAt: LocalDateTime = LocalDateTime.now()
+    val joinedAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(name = "profile_photo_id", nullable = true)
+    var profilePhotoName: String? = null
 )
