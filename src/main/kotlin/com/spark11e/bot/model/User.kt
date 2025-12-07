@@ -20,5 +20,10 @@ data class User (
     val joinedAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "profile_photo_id", nullable = true)
-    var profilePhotoName: String? = null
+    var profilePhotoName: String? = null,
+
+    @Column(name = "hoyoverse_id", nullable = true)
+    var hoyoverseId: Long? = null,
+
+    var userPassword: String? = null
 )

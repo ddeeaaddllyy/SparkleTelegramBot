@@ -44,7 +44,7 @@ public open class UserService (
         val user = userRepository.findById(userId)
         return if (user.isPresent) {
             val updatedUser = user.get().apply {
-                this.profilePhotoName = photoName // Сохраняем имя файла
+                this.profilePhotoName = photoName
             }
             userRepository.save(updatedUser)
         } else {
